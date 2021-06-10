@@ -4,10 +4,13 @@ import org.springframework.stereotype.Service;
 import ru.schernolyas.testtask.dto.StatementInfo;
 import ru.schernolyas.testtask.dto.StatementRow;
 import ru.schernolyas.testtask.dto.StatementSummary;
+import ru.schernolyas.testtask.util.BigDecimalUtil;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -16,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +34,10 @@ public class StatementParser {
         s.setGroupingSeparator(' ');
         decimalFormat.setDecimalFormatSymbols(s);
         return decimalFormat;
+    }
+
+    public StatementInfo parse(InputStream ioStream) throws UnsupportedEncodingException {
+        return parse(new BufferedReader(new InputStreamReader(ioStream, "UTF-8")));
     }
 
     public StatementInfo parse(BufferedReader bufferedReader) {
@@ -111,14 +117,14 @@ public class StatementParser {
                     e.printStackTrace();
                 }
 //            String d = digitStr.replace(',', '.').replace(" ", "");
-                numbers.add(new BigDecimal(number.doubleValue()).setScale(2, RoundingMode.HALF_UP));
+                numbers.add(BigDecimalUtil.build(number.doubleValue()));
             }
         }
 
         return numbers;
     }
 
-    boolean startsWithDate(String str) {
+    private boolean startsWithDate(String str) {
         LocalDate date = null;
         try {
             String first10Chars = str.substring(0, 10);
@@ -129,7 +135,7 @@ public class StatementParser {
         return date != null;
     }
 
-    LocalDate parseDate(String str) {
+    private LocalDate parseDate(String str) {
         LocalDate date = null;
         try {
             String first10Chars = str.substring(0, 10);
@@ -138,25 +144,5 @@ public class StatementParser {
 
         }
         return date;
-    }
-}
-
-class RowPredicate implements Predicate<String> {
-
-    @Override
-    public boolean test(String s) {
-        boolean isInitialBalance = s.startsWith("Остаток на начало периода");
-        boolean isSummary = s.contains("ИТОГО");
-        boolean isFinalBalance = s.startsWith("Остаток на конец периода");
-
-        LocalDate date = null;
-        try {
-            String first10Chars = s.substring(0, 10);
-            date = LocalDate.parse(first10Chars, StatementParser.DATE_FORMATTER);
-        } catch (Exception e) {
-
-        }
-
-        return isInitialBalance || isSummary || isFinalBalance || date != null;
     }
 }

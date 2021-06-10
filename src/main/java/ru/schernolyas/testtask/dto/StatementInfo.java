@@ -1,12 +1,13 @@
 package ru.schernolyas.testtask.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatementInfo {
     private BigDecimal initialBalance;
     private BigDecimal finalBalance;
-    private List<StatementRow> statementRows;
+    private List<StatementRow> statementRows = new ArrayList<>();
     private StatementSummary statementSummary;
     private Boolean correct;
 

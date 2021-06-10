@@ -3,6 +3,7 @@ package ru.schernolyas.testtask;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
+import ru.schernolyas.testtask.service.StatementChecker;
 import ru.schernolyas.testtask.service.StatementParser;
 
 @TestConfiguration
@@ -12,5 +13,10 @@ public class TestConfig {
     @Bean
     public StatementParser statementParser() {
         return new StatementParser();
+    }
+
+    @Bean
+    public StatementChecker statementChecker() {
+        return new StatementChecker();
     }
 }
