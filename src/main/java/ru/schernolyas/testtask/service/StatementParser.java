@@ -46,8 +46,6 @@ public class StatementParser {
         Iterator<String> it = bufferedReader.lines().iterator();
         while (it.hasNext()) {
             String currentLine = it.next();
-            System.out.println("----");
-            System.out.println(currentLine);
             if (currentLine.trim().length() == 0 ||
                     currentLine.startsWith("----------")
             ) {
@@ -58,7 +56,6 @@ public class StatementParser {
                 boolean isInitialBalance = currentLine.startsWith("Остаток на начало периода");
                 if (isInitialBalance) {
                     BigDecimal number = extractNumbers(currentLine).get(0);
-                    System.out.println(number);
                     statementInfo.setInitialBalance(number);
                 }
             }
@@ -66,13 +63,11 @@ public class StatementParser {
                 boolean isFinalBalance = currentLine.startsWith("Остаток на конец периода");
                 if (isFinalBalance) {
                     BigDecimal number = extractNumbers(currentLine).get(0);
-                    System.out.println(number);
                     statementInfo.setFinalBalance(number);
                 }
             }
             if (statementInfo.getStatementSummary() == null) {
                 boolean isSummary = currentLine.startsWith("ИТОГО");
-                System.out.println(isSummary);
                 if (isSummary) {
                     List<BigDecimal> numbers = extractNumbers(currentLine);
                     statementInfo.setStatementSummary(new StatementSummary(numbers.get(0), numbers.get(1)));

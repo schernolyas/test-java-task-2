@@ -1,8 +1,11 @@
 package ru.schernolyas.testtask.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 public class StatementRow {
     private LocalDate date;
     private String correspondentAccount;
@@ -18,23 +21,5 @@ public class StatementRow {
         this.comment = comment;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
 
-    public String getCorrespondentAccount() {
-        return correspondentAccount;
-    }
-
-    public BigDecimal getDebit() {
-        return debit;
-    }
-
-    public BigDecimal getCredit() {
-        return credit;
-    }
-
-    public String getComment() {
-        return comment;
-    }
 }

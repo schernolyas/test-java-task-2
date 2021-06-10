@@ -1,7 +1,10 @@
 package ru.schernolyas.testtask.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 public class StatementSummary {
     private BigDecimal debit;
     private BigDecimal credit;
@@ -11,11 +14,5 @@ public class StatementSummary {
         this.credit = credit;
     }
 
-    public BigDecimal getDebit() {
-        return debit;
-    }
 
-    public BigDecimal getCredit() {
-        return credit;
-    }
 }
